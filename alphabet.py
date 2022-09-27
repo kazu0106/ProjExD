@@ -23,7 +23,7 @@ def reqest(alphabet):#問題文の設定
             print(exchange, end=" ")
 
 def Correct(ans):
-    ele = input("欠損文字はいくつあるでしょうか？：") #欠損文字の個数 
+    ele = input("欠損文字はいくつあるでしょうか.？：") #欠損文字の個数 
     if ele != loss: 
         print("不正解ですyo。")
     
