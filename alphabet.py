@@ -17,7 +17,7 @@ def reqest(alphabet):#問題文の設定
         print(exchange, end=" ")
 
     loss_al= random.sample(all_al, loss)  #欠損文字を選ぶ
-    print("表示文字：", end="")
+    print("表示文字:：", end="")
     for exchange in all_al: 
         if exchange not in loss_al :  
             print(exchange, end=" ")
@@ -25,7 +25,7 @@ def reqest(alphabet):#問題文の設定
 def Correct(ans):
     ele = input("欠損文字はいくつあるでしょうか？：") #欠損文字の個数 
     if ele != loss: 
-        print("不正解です。")
+        print("不正解ですyo。")
     
     else : 
         print("正解です．では，具体的に欠損文字を1つずつ入力してください．")
