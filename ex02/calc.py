@@ -6,12 +6,12 @@ root.geometry("300x500")
 
 def bt_click(event):
     btn = event.widget
-    num = int(btn["text"])
+    calc_n = btn["text"]
 
 r, c = 0, 0
-for i, num in enumerate(range(9,-1, -1), 1):
-    btn = tk.Button(root, text=f"{num}", font=("", 30), width=4, height=2)
-    btn.bind("<1>",bt_click)
+for i, calc_n in enumerate(range(9,-1, -1), 1):
+    btn = tk.Button(root, text=f"{calc_n}", width=3, height=4)
+    btn.bind("<2>",bt_click)
     btn.grid(row=r, column=c)
     c += 1
     if i%3 == 0:
