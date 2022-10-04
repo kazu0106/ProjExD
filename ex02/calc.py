@@ -1,21 +1,39 @@
 import tkinter as tk
-from turtle import width
-root=tk.Tk()
-root.title("電卓")
+import tkinter.messagebox as tkm
+
+def click_number(event):
+    btn = event.widget
+    num = btn["text"]
+    entry.insert(tk.END, num) 
+
+
+def click_equal(event):
+    eqn = entry.get()
+    res = eval(eqn)
+    entry.delete(0, tk.END)
+    entry.insert(tk.END, res) 
+
+
+root = tk.Tk() # 練習1
 root.geometry("300x500")
 
-def bt_click(event):
-    btn = event.widget
-    calc_n = btn["text"]
+entry = tk.Entry(root, width=10, font=(", 40"), justify="right") # 練習4
+entry.grid(row=0, column=0, columnspan=3)
 
-r, c = 0, 0
-for i, calc_n in enumerate(range(9,-1, -1), 1):
-    btn = tk.Button(root, text=f"{calc_n}", width=3, height=4)
-    btn.bind("<2>",bt_click)
+r, c = 1, 0 # r: 行を表す変数／c：列を表す変数
+numbers = list(range(9, -1, -1)) # 数字だけのリスト
+operators = ["+"] # 演算子だけのリスト
+for i, num in enumerate(numbers+operators, 1):
+    btn = tk.Button(root, text=f"{num}", font=("", 30), width=4, height=2)
+    btn.bind("<1>", click_number)
     btn.grid(row=r, column=c)
     c += 1
     if i%3 == 0:
-         r += 1
-         c = 0
-root.mainloop()
+        r += 1
+        c = 0
 
+btn = tk.Button(root, text=f"=", font=("", 30), width=4, height=2)
+btn.bind("<1>", click_equal)
+btn.grid(row=r, column=c)
+
+root.mainloop()
