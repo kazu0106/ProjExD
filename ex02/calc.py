@@ -35,7 +35,7 @@ for i, num in enumerate(numbers+operators, 1):#電卓を造る
     b = tk.Button(text=f"{num}", bg='light blue',font=("",30),width=4,height=2)#点滅を実装
     b.bind('<1>' ,click_number) 
     
-    btn.grid(row=r, column=c)   #縦横を仕切る
+    btn.grid(row=r, column=c)   #縦横を仕切
     b.grid(row=r, column=c)
     c += 1
     
