@@ -39,7 +39,7 @@ for i, num in enumerate(numbers+operators, 1):#電卓を造る
     b.grid(row=r, column=c)
     c += 1
     
-    if i%3 == 0: #縦横　3列　4列の別　
+    if i%3 == 0: #縦横　3列　4列　
         r += 1
         c = 0
 
