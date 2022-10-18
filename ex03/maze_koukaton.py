@@ -12,7 +12,7 @@ def key_up(event):
     global key
     key = ""
 
-#==========================================================
+
 
 
 
@@ -64,6 +64,7 @@ def main_proc():
         else:  #画面下に到達時
             if key == "Up":
                 my += 1
+                
             if key == "Down":
                 my -= 1
             if key == "Left":
