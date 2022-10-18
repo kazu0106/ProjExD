@@ -20,7 +20,7 @@ def main_proc():
     global mx, my
     global cx, cy
  ##こうかとんが移動する   =================================
-    #通常の移動
+    #通常
     if key == "Up":
         my -= 1
     if key == "Down":
