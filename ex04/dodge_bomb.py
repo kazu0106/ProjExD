@@ -2,7 +2,7 @@
 import pygame as pg
 import sys 
 import time
-from random import randint
+from random import randint, random
 
 #こうかとん、爆弾が画面外に出たかどうかチェックする
 def check_bound(obj_rct,scr_rct):
@@ -18,9 +18,10 @@ def main():
     pg.display.set_caption("Escape!! こうかとん")# 　ディスプレイ名
 
     #背景について  
-    scrn_sfc =pg.display.set_mode((1600,900))
+    scrn_sfc =pg.display.set_mode((1200,600))
     scrn_rct = scrn_sfc.get_rect()
-    bomb_game_bg_sfc=pg.image.load("fig/pg_bg.jpg") #背景画像
+    bomb_game_bg_sfc=pg.image.load("fig/darkside_2.jpg") #背景画像
+    bomb_game_bg_sfc=pg.transform.scale(bomb_game_bg_sfc,(1200,600))
     bomb_game_bg_rct=bomb_game_bg_sfc.get_rect() #背景画像を取り出す
 
     
@@ -33,8 +34,8 @@ def main():
     # 爆弾について
     baku_sfc = pg.Surface((20, 20)) # 空のSurface
     baku_sfc.set_colorkey((0, 0, 0)) # 四隅の黒い部分を透過させる
-    pg.draw.circle(baku_sfc, (255, 0, 0), (10, 10), 10) # 円を描く
-    baku_rct = bomb_game_bg_sfc.get_rect()
+    pg.draw.circle(baku_sfc, (100, 40, 10), (10, 10), 10) # 円を描く
+    baku_rct = baku_sfc.get_rect()
     baku_rct.centerx = randint(0, scrn_rct.width)
     baku_rct.centery = randint(0, scrn_rct.height)
 
@@ -72,7 +73,7 @@ def main():
             if key_states[pg.K_UP]: 
                 tori_rct.centery += 1
             if key_states[pg.K_DOWN]:
-                tori_rct.centery -= 1  
+                tori_rct.centery -= 1 
         scrn_sfc.blit(tori_sfc,tori_rct)    # こうかとん貼り付け     
         
 
@@ -81,17 +82,15 @@ def main():
         vx *= yoko
         vy *= tate
         baku_rct.move_ip(vx, vy) 
-        scrn_sfc.blit(baku_sfc, baku_rct) 
-        baku_rct.move_ip(vx,vy)
         scrn_sfc.blit(baku_sfc, baku_rct)   #爆弾貼り付け
         
         
         
         if tori_rct.colliderect(baku_rct):
-            return 
+            return
         
         pg.display.update() #更新
-        clock.tick(1000) #framerate 1000　1秒あたり1000フレーム　1秒間で1000フレーム
+        clock.tick(randint(200,600)) #framerate 1000　1秒あたり1000フレーム　1秒間で1000フレーム
 
 #プログラムの開始・終了
 if __name__ == "__main__":
