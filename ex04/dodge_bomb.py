@@ -39,7 +39,7 @@ def main():
     baku_rct.centerx = randint(0, scrn_rct.width)
     baku_rct.centery = randint(0, scrn_rct.height)
 
-    vx, vy = +1, +1 #爆弾が移動する
+    vx, vy = +1, +1 #爆弾が移動するための変数
 
     #表示時間   
     clock= pg.time.Clock() 
