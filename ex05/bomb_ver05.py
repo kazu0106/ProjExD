@@ -4,7 +4,7 @@ from random import randint
 import cv2
 import numpy as np
 
-class Screen:
+class Screen: #画面表示に関して
     def __init__(self, title, wh, bgimg):
         pg.display.set_caption(title) #逃げろ！こうかとん
         self.sfc = pg.display.set_mode(wh) #(1600, 900)
@@ -12,7 +12,7 @@ class Screen:
         self.bgi_sfc = pg.image.load(bgimg) #"fig/pg_bg.jpg"
         self.bgi_rct = self.bgi_sfc.get_rect()
         
-    def blit(self):
+    def blit(self):#画面に表示
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
 
 
@@ -23,8 +23,8 @@ class Bird: #こうかとんに関して
         pg.K_LEFT:  [-1, 0],
         pg.K_RIGHT: [+1, 0],
     }
-
-    def __init__(self, img, zoom, xy):
+    
+    def __init__(self, img, zoom, xy): #細かい設定
         sfc = pg.image.load(img) # "fig/gagu.png"
         self.sfc = pg.transform.rotozoom(sfc, 0, zoom) # 2.0
         self.rct = self.sfc.get_rect()
@@ -75,6 +75,7 @@ def check_bound(obj_rct, scr_rct): #壁の跳ね返り
         tate = -1
     return yoko, tate
 
+
 def fight(): #こうかとん闘う
         img1 = pg.image.load("fig/explode.jpg")
         img2 = pg.image.load("fig/angryjpg.jpg")
@@ -83,9 +84,7 @@ def fight(): #こうかとん闘う
         if key == "f":
             Screen.blit(img1, (20, 20))
             Screen.blit(img2, (150,20))
-
         pg.display.update() #描画処理を実行
-
 
 
 def main(): #実際の動作
@@ -95,16 +94,15 @@ def main(): #実際の動作
     clock = pg.time.Clock() 
     while True:
         scr.blit() 
+        
         for event in pg.event.get(): 
             if event.type == pg.QUIT:
                 return
-       
         kkt.update(scr)
         bkd.update(scr)
 
         if kkt.rct.colliderect(bkd.rct): # こうかとんrctが爆弾rctと重ると
             return
-
         pg.display.update() 
         clock.tick(1000)
 
