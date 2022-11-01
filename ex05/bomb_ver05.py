@@ -1,7 +1,6 @@
 import pygame as pg
 import sys
 from random import randint
-
 import cv2
 import numpy as np
 
@@ -17,7 +16,7 @@ class Screen:
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
 
 
-class Bird:
+class Bird: #こうかとんに関して
     key_delta = {
         pg.K_UP:    [0, -1],
         pg.K_DOWN:  [0, +1],
@@ -26,7 +25,7 @@ class Bird:
     }
 
     def __init__(self, img, zoom, xy):
-        sfc = pg.image.load(img) # "fig/6.png"
+        sfc = pg.image.load(img) # "fig/gagu.png"
         self.sfc = pg.transform.rotozoom(sfc, 0, zoom) # 2.0
         self.rct = self.sfc.get_rect()
         self.rct.center = xy # 900, 400
@@ -44,17 +43,6 @@ class Bird:
                     self.rct.centerx -= delta[0]
                     self.rct.centery -= delta[1]
                 
-    def fight(self,scr:Screen): #こうかとんた
-        img1 = pg.image.load("fig/explode.jpg")
-        img2 = pg.image.load("fig/angryjpg.jpg")
-        
-        
-        #---------------  2.画像を表示  --------------------------
-        scr.blit(img1, (20, 20))
-        scr.blit(img2, (150,20))
-        
-        
-        pg.display.update() #描画処理を実行
 
 
 class Bomb:#爆弾に関する情報
@@ -78,12 +66,8 @@ class Bomb:#爆弾に関する情報
         self.blit(scr) # =scr.sfc.blit(self.sfc, self.rct)
 
 
-def check_bound(obj_rct, scr_rct):
-    """
-    obj_rct：こうかとんrct，または，爆弾rct
-    scr_rct：スクリーンrct
-    領域内：+1／領域外：-1
-    """
+def check_bound(obj_rct, scr_rct): #壁の跳ね返り
+   
     yoko, tate = +1, +1
     if obj_rct.left < scr_rct.left or scr_rct.right < obj_rct.right: 
         yoko = -1
@@ -91,33 +75,41 @@ def check_bound(obj_rct, scr_rct):
         tate = -1
     return yoko, tate
 
+def fight(): #こうかとん闘う
+        img1 = pg.image.load("fig/explode.jpg")
+        img2 = pg.image.load("fig/angryjpg.jpg")
+        
+ #---------------  2.画像を表示  --------------------------
+        if key == "f":
+            Screen.blit(img1, (20, 20))
+            Screen.blit(img2, (150,20))
 
-def main():
+        pg.display.update() #描画処理を実行
+
+
+
+def main(): #実際の動作
     scr = Screen("逃げろ！こうかとん", (1200, 900), "fig/darkside_2.jpg")
-
     kkt = Bird("fig/gagu.png", 2.0 (900,400))
-
     bkd = Bomb((255, 0, 0), 10, (+1, +1), scr)
-
     clock = pg.time.Clock() 
     while True:
         scr.blit() 
-        
         for event in pg.event.get(): 
             if event.type == pg.QUIT:
                 return
-        
+       
         kkt.update(scr)
         bkd.update(scr)
 
-        if kkt.rct.colliderect(bkd.rct): # こうかとんrctが爆弾rctと重なったら
+        if kkt.rct.colliderect(bkd.rct): # こうかとんrctが爆弾rctと重ると
             return
 
         pg.display.update() 
         clock.tick(1000)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": #プログラムの終始
     pg.init() # 初期化
     main()    # ゲームの本体
     pg.quit() # 初期化の解除
