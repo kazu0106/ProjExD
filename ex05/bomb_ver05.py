@@ -4,7 +4,8 @@ from random import randint
 import cv2
 import numpy as np
 
-class Screen: #画面表示に関して
+#画面表示に関して
+class Screen: 
     def __init__(self, title, wh, bgimg):
         pg.display.set_caption(title) #逃げろ！こうかとん
         self.sfc = pg.display.set_mode(wh) #(1600, 900)
@@ -16,7 +17,8 @@ class Screen: #画面表示に関して
         self.sfc.blit(self.bgi_sfc, self.bgi_rct)
 
 
-class Bird: #こうかとんに関して
+#こうかとんに関して
+class Bird:
     key_delta = {
         pg.K_UP:    [0, -1],
         pg.K_DOWN:  [0, +1],
@@ -30,10 +32,10 @@ class Bird: #こうかとんに関して
         self.rct = self.sfc.get_rect()
         self.rct.center = xy # 900, 400
 
-    def blit(self, scr:Screen):
+    def blit(self, scr:Screen):#貼り付け
         scr.sfc.blit(self.sfc, self.rct)
 
-    def update(self, scr:Screen):
+    def update(self, scr:Screen):#更新内容適用
         key_states = pg.key.get_pressed()
         for key, delta in Bird.key_delta.items():
             if key_states[key]:
@@ -44,8 +46,8 @@ class Bird: #こうかとんに関して
                     self.rct.centery -= delta[1]
                 
 
-
-class Bomb:#爆弾に関する情報
+#爆弾に関する情報
+class Bomb:
     def __init__(self, color, radius, vxy, scr:Screen):
         self.sfc = pg.Surface((radius*2, radius*2)) # 空のSurface
         self.sfc.set_colorkey((0, 0, 0)) # 四隅の黒い部分を透過させる
@@ -55,7 +57,7 @@ class Bomb:#爆弾に関する情報
         self.rct.centery = randint(0, scr.rct.height)
         self.vx, self.vy = vxy
 
-    def blit(self, scr:Screen):
+    def blit(self, scr:Screen):#貼り付け
         scr.sfc.blit(self.sfc, self.rct)
 
     def update(self, scr:Screen):
@@ -66,7 +68,8 @@ class Bomb:#爆弾に関する情報
         self.blit(scr) # =scr.sfc.blit(self.sfc, self.rct)
 
 
-def check_bound(obj_rct, scr_rct): #壁の跳ね返り
+#壁の跳ね返り
+def check_bound(obj_rct, scr_rct): 
    
     yoko, tate = +1, +1
     if obj_rct.left < scr_rct.left or scr_rct.right < obj_rct.right: 
@@ -76,6 +79,7 @@ def check_bound(obj_rct, scr_rct): #壁の跳ね返り
     return yoko, tate
 
 
+#こうかとん闘う
 def fight(): #こうかとん闘う
         img1 = pg.image.load("fig/explode.jpg")
         img2 = pg.image.load("fig/angryjpg.jpg")
