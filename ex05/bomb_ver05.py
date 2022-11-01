@@ -2,6 +2,9 @@ import pygame as pg
 import sys
 from random import randint
 
+import cv2
+import numpy as np
+
 class Screen:
     def __init__(self, title, wh, bgimg):
         pg.display.set_caption(title) #逃げろ！こうかとん
@@ -40,10 +43,21 @@ class Bird:
                 if check_bound(self.rct, scr.rct) != (+1, +1):
                     self.rct.centerx -= delta[0]
                     self.rct.centery -= delta[1]
-        self.blit(scr) # =scr.sfc.blit(self.sfc, self.rct)
+                
+    def fight(self,scr:Screen): #こうかとんた
+        img1 = pg.image.load("fig/explode.jpg")
+        img2 = pg.image.load("fig/angryjpg.jpg")
+        
+        
+        #---------------  2.画像を表示  --------------------------
+        scr.blit(img1, (20, 20))
+        scr.blit(img2, (150,20))
+        
+        
+        pg.display.update() #描画処理を実行
 
 
-class Bomb:
+class Bomb:#爆弾に関する情報
     def __init__(self, color, radius, vxy, scr:Screen):
         self.sfc = pg.Surface((radius*2, radius*2)) # 空のSurface
         self.sfc.set_colorkey((0, 0, 0)) # 四隅の黒い部分を透過させる
@@ -79,34 +93,27 @@ def check_bound(obj_rct, scr_rct):
 
 
 def main():
-    # 練習1
-    scr = Screen("逃げろ！こうかとん", (1600, 900), "fig/pg_bg.jpg")
+    scr = Screen("逃げろ！こうかとん", (1200, 900), "fig/darkside_2.jpg")
 
-    # 練習3
-    kkt = Bird("fig/6.png", 2.0, (900, 400))
+    kkt = Bird("fig/gagu.png", 2.0 (900,400))
 
-    # 練習5
     bkd = Bomb((255, 0, 0), 10, (+1, +1), scr)
 
-    clock = pg.time.Clock() # 練習1
+    clock = pg.time.Clock() 
     while True:
-        scr.blit() # 練習2
+        scr.blit() 
         
-        for event in pg.event.get(): # 練習2
+        for event in pg.event.get(): 
             if event.type == pg.QUIT:
                 return
-
-        # 練習4
+        
         kkt.update(scr)
-
-        # 練習7
         bkd.update(scr)
 
-        # 練習8
         if kkt.rct.colliderect(bkd.rct): # こうかとんrctが爆弾rctと重なったら
             return
 
-        pg.display.update() #練習2
+        pg.display.update() 
         clock.tick(1000)
 
 
