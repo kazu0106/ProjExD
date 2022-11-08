@@ -1,4 +1,5 @@
 import pygame as pg
+import tkinter as tk
 import sys
 from random import randint
 #import cv2
@@ -69,18 +70,16 @@ class Bomb:
         self.vy *= tate
         self.blit(scr) # =scr.sfc.blit(self.sfc, self.rct)
 
-#ブロックン詳細設定
-class Block(pg.sprite.Sprite): 
+#ブロック詳細設定
+class Block: 
         
-    def __init__(self, dir , x, y):
-        pg.sprite.Sprite.__init__(self, self.array)
-        self.image = pg.image.load(dir).convert()
-        self.rect = self.image.get_rect()
+    def __init__(self, rect,x,y):
+        self.rect=rect
+        self.rect=pg.Rect(100, 200,20,40)
         self.src=Screen
         # ブロックの左上座標 描画
-        self.rect.left = self.sfc.left + x * self.rect.width 
-        self.rect.top = self.scr.top + y * self.rect.height
-        self.dir = pg.transform.rotozoom(dir, 0,2.0 ) # 2.0
+        self.rect.left = self.src.left + x * self.rect.width 
+        self.rect.top = self.src.top + y * self.rect.height
             
         #ブロックの判定
         blocks_collided = pg.sprite.spritecollide(self, self.blocks, True)
@@ -107,15 +106,7 @@ class Block(pg.sprite.Sprite):
                 # ボールが下からブロックへ衝突した場合
                 if block.rect.top < broken_rect.top and block.rect.bottom < broken_rect.bottom:
                     self.rect.top = block.rect.bottom
-                    self.dy = -self.dy #跳ね返る
-
-        def blit(self, scr:Screen):#貼り付け
-            scr.sfc.blit(self.dir, self.rect)
-
-        def update(self, scr:Screen):
-            self.image
-
-
+                    self.dy = -self.dy #跳ね返る         
 
 
 
@@ -134,8 +125,9 @@ def main(): #実際の動作
     scr = Screen("逃げろ！こうかとん", (1200, 900), "fig/pg_bg.jpg")
     kkt = Bird("fig/6.png", 2.0, (900,400))
     bkd = Bomb((255, 0, 0), 10, (+1, +1), scr)
+    rect=pg.Rect(100,200,20,40)
     
-    block_design=Block
+    block_design=Block(rect,3,3)
 
     
     clock = pg.time.Clock() 
