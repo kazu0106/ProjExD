@@ -1,8 +1,8 @@
 import pygame as pg
 import sys
 from random import randint
-import cv2
-import numpy as np
+#import cv2
+#import numpy as np
 
 #画面表示に関して
 class Screen: 
@@ -27,7 +27,7 @@ class Bird:
     }
     
     def __init__(self, img, zoom, xy): #細かい設定
-        sfc = pg.image.load(img) # "fig/gagu.png"
+        sfc = pg.image.load(img) # "fig/6.png"
         self.sfc = pg.transform.rotozoom(sfc, 0, zoom) # 2.0
         self.rct = self.sfc.get_rect()
         self.rct.center = xy # 900, 400
@@ -48,14 +48,16 @@ class Bird:
 
 #爆弾に関する情報
 class Bomb:
+    
     def __init__(self, color, radius, vxy, scr:Screen):
-        self.sfc = pg.Surface((radius*2, radius*2)) # 空のSurface
+        self.sfc = pg.Surface((radius*2, radius*2)) # 円の大元を造る
         self.sfc.set_colorkey((0, 0, 0)) # 四隅の黒い部分を透過させる
         pg.draw.circle(self.sfc, color, (radius, radius), radius) # 爆弾用の円を描く
         self.rct = self.sfc.get_rect()
+        #円の中心を決める
         self.rct.centerx = randint(0, scr.rct.width)
         self.rct.centery = randint(0, scr.rct.height)
-        self.vx, self.vy = vxy
+        self.vx, self.vy = vxy #円が動く
 
     def blit(self, scr:Screen):#貼り付け
         scr.sfc.blit(self.sfc, self.rct)
@@ -66,6 +68,55 @@ class Bomb:
         self.vx *= yoko
         self.vy *= tate
         self.blit(scr) # =scr.sfc.blit(self.sfc, self.rct)
+
+#ブロックン詳細設定
+class Block(pg.sprite.Sprite): 
+        
+    def __init__(self, dir , x, y):
+        pg.sprite.Sprite.__init__(self, self.array)
+        self.image = pg.image.load(dir).convert()
+        self.rect = self.image.get_rect()
+        self.src=Screen
+        # ブロックの左上座標 描画
+        self.rect.left = self.sfc.left + x * self.rect.width 
+        self.rect.top = self.scr.top + y * self.rect.height
+        self.dir = pg.transform.rotozoom(dir, 0,2.0 ) # 2.0
+            
+        #ブロックの判定
+        blocks_collided = pg.sprite.spritecollide(self, self.blocks, True)
+        if blocks_collided:  # 衝突ブロックがある場合
+            broken_rect = self.rect #ブロックを認識するためのリスト
+            for block in blocks_collided:
+                
+                # ボールが左からブロックへ衝突した場合
+                if broken_rect.left < block.rect.left and broken_rect.right < block.rect.right:
+                    self.rect.right = block.rect.left
+                    self.dx = -self.dx #跳ね返る
+                    
+                
+                # ボールが右からブロックへ衝突した場合
+                if block.rect.left < broken_rect.left and block.rect.right < broken_rect.right:
+                    self.rect.left = block.rect.right
+                    self.dx = -self.dx #跳ね返る
+
+                # ボールが上からブロックへ衝突した場合
+                if broken_rect.top < block.rect.top and broken_rect.bottom < block.rect.bottom:
+                    self.rect.bottom = block.rect.top
+                    self.dy = -self.dy #跳ね返る
+
+                # ボールが下からブロックへ衝突した場合
+                if block.rect.top < broken_rect.top and block.rect.bottom < broken_rect.bottom:
+                    self.rect.top = block.rect.bottom
+                    self.dy = -self.dy #跳ね返る
+
+        def blit(self, scr:Screen):#貼り付け
+            scr.sfc.blit(self.dir, self.rect)
+
+        def update(self, scr:Screen):
+            self.image
+
+
+
 
 
 #壁の跳ね返り
@@ -79,22 +130,14 @@ def check_bound(obj_rct, scr_rct):
     return yoko, tate
 
 
-#こうかとん闘う
-def fight(): #こうかとん闘う
-        img1 = pg.image.load("fig/explode.jpg")
-        img2 = pg.image.load("fig/angryjpg.jpg")
-        
- #---------------  2.画像を表示  --------------------------
-        if key == "f":
-            Screen.blit(img1, (20, 20))
-            Screen.blit(img2, (150,20))
-        pg.display.update() #描画処理を実行
-
-
 def main(): #実際の動作
-    scr = Screen("逃げろ！こうかとん", (1200, 900), "fig/darkside_2.jpg")
-    kkt = Bird("fig/gagu.png", 2.0 (900,400))
+    scr = Screen("逃げろ！こうかとん", (1200, 900), "fig/pg_bg.jpg")
+    kkt = Bird("fig/6.png", 2.0, (900,400))
     bkd = Bomb((255, 0, 0), 10, (+1, +1), scr)
+    
+    block_design=Block
+
+    
     clock = pg.time.Clock() 
     while True:
         scr.blit() 
@@ -102,8 +145,9 @@ def main(): #実際の動作
         for event in pg.event.get(): 
             if event.type == pg.QUIT:
                 return
-        kkt.update(scr)
+      
         bkd.update(scr)
+        kkt.update(scr)
 
         if kkt.rct.colliderect(bkd.rct): # こうかとんrctが爆弾rctと重ると
             return
